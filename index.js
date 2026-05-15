@@ -636,12 +636,5 @@ client.on("messageCreate", async (message) => {
 
   if (message.content.toLowerCase() !== "painel") return;
 
-  await message.channel.send({
-  embeds: [embed],
-  components: [row]
-});
-
-});
-
 // ================= LOGIN =================
 client.login(process.env.TOKEN);
