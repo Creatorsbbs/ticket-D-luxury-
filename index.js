@@ -649,11 +649,10 @@ client.on("messageCreate", async (message) => {
 
   if (message.content.toLowerCase() !== "painel") return;
 
-  client.emit("interactionCreate", {
-    ...message,
-    isChatInputCommand: () => false,
-    channel: message.channel
-  });
+  await message.channel.send({
+  embeds: [embed],
+  components: [row]
+});
 
 });
 
