@@ -166,9 +166,18 @@ client.on("interactionCreate", async (interaction) => {
 
     if (!interaction.isChatInputCommand()) return;
 
+    const fakeMessage = interaction;
+
+if (
+  interaction.isChatInputCommand() &&
+  interaction.commandName !== "painel"
+) return;
+
     if (interaction.commandName === "painel") {
 
-      await interaction.deferReply();
+      if (interaction.isChatInputCommand()) {
+  await interaction.deferReply();
+      }
 
       const embed = new EmbedBuilder()
         .setTitle("🎫 CENTRAL DE ATENDIMENTO")
@@ -219,11 +228,21 @@ Explique sua situação com o máximo de detalhes possível para agilizar o aten
           .setStyle(ButtonStyle.Secondary)
       );
 
-      return interaction.editReply({
-        embeds: [embed],
-        components: [row]
-      });
-    }
+      if (interaction.isChatInputCommand()) {
+
+  return interaction.editReply({
+    embeds: [embed],
+    components: [row]
+  });
+
+} else {
+
+  return interaction.channel.send({
+    embeds: [embed],
+    components: [row]
+  });
+
+      }
 
   } catch (err) {
 
@@ -620,6 +639,21 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`🌐 Servidor web online na porta ${PORT}`);
+});
+
+// ================= COMANDO PAINEL =================
+client.on("messageCreate", async (message) => {
+
+  if (message.author.bot) return;
+
+  if (message.content.toLowerCase() !== "painel") return;
+
+  client.emit("interactionCreate", {
+    ...message,
+    isChatInputCommand: () => false,
+    channel: message.channel
+  });
+
 });
 
 // ================= LOGIN =================
