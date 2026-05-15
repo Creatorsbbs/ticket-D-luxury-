@@ -222,8 +222,6 @@ Explique sua situação com o máximo de detalhes possível para agilizar o aten
     embeds: [embed],
     components: [row]
   });
-
-      }
     
   } catch (err) {
 
