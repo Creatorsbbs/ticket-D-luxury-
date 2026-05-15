@@ -160,25 +160,12 @@ async function setupServer(guild) {
 }
 
 // ================= PAINEL =================
-client.on("interactionCreate", async (interaction) => {
+client.on("messageCreate", async (message) => {
 
-  try {
+  if (message.author.bot) return;
 
-    if (!interaction.isChatInputCommand()) return;
-
-    const fakeMessage = interaction;
-
-if (
-  interaction.isChatInputCommand() &&
-  interaction.commandName !== "painel"
-) return;
-
-    if (interaction.commandName === "painel") {
-
-      if (interaction.isChatInputCommand()) {
-  await interaction.deferReply();
-      }
-
+  if (message.content.toLowerCase() !== "painel") return;
+  
       const embed = new EmbedBuilder()
         .setTitle("🎫 CENTRAL DE ATENDIMENTO")
         .setThumbnail("https://cdn.discordapp.com/attachments/1264564541979627604/1504187640524701726/file_000000005270720e895d4916721bd3ce.png?ex=6a08b667&is=6a0764e7&hm=9ffdfd4d3da6d142e8cfaacb51b9088c34025d4947ccadb67a3df9c7b49f7240&")
