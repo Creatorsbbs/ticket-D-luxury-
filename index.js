@@ -12,6 +12,14 @@ const {
 const { QuickDB } = require("quick.db");
 const db = new QuickDB();
 
+const extraRoles = [
+  "ID_DO_CARGO_1",
+  "ID_DO_CARGO_2",
+  "ID_DO_CARGO_3",
+  "ID_DO_CARGO_4",
+  "ID_DO_CARGO_5"
+];
+
 // ================= DADOS =================
 const ticketOwners = new Map();
 const ticketData = new Map();
@@ -83,16 +91,6 @@ async function setupServer(guild) {
       PermissionsBitField.Flags.SendMessages
     ]
   }] : []),
-
-  ...extraRoles.map(roleId => ({
-    id: roleId,
-    allow: [
-      PermissionsBitField.Flags.ViewChannel,
-      PermissionsBitField.Flags.SendMessages,
-      PermissionsBitField.Flags.ReadMessageHistory
-    ]
-  }))
-]
 
       console.log("✔ Canal tickets-abertos criado");
     }
@@ -278,13 +276,6 @@ client.on("interactionCreate", async (interaction) => {
         });
       }
 
-      const extraRoles = [
-    "ID1",
-    "ID2",
-    "ID3",
-    "ID4",
-    "ID5"
-  ];
 
       const channel = await guild.channels.create({
         name: `🎫-${type}-${user.username.toLowerCase().replace(/[^a-z0-9]/g, "")}-${Date.now().toString().slice(-4)}`,
@@ -292,29 +283,37 @@ client.on("interactionCreate", async (interaction) => {
         parent: category.id,
 
         permissionOverwrites: [
-          {
-            id: guild.id,
-            deny: [PermissionsBitField.Flags.ViewChannel]
-          },
+  {
+    id: guild.id,
+    deny: [PermissionsBitField.Flags.ViewChannel]
+  },
 
-          {
-            id: user.id,
-            allow: [
-              PermissionsBitField.Flags.ViewChannel,
-              PermissionsBitField.Flags.SendMessages,
-              PermissionsBitField.Flags.ReadMessageHistory
-            ]
-          },
+  {
+    id: user.id,
+    allow: [
+      PermissionsBitField.Flags.ViewChannel,
+      PermissionsBitField.Flags.SendMessages,
+      PermissionsBitField.Flags.ReadMessageHistory
+    ]
+  },
 
-          ...(staffRole ? [{
-            id: staffRole.id,
-            allow: [
-              PermissionsBitField.Flags.ViewChannel,
-              PermissionsBitField.Flags.SendMessages
-            ]
-          }] : [])
-        ]
-      });
+  ...(staffRole ? [{
+    id: staffRole.id,
+    allow: [
+      PermissionsBitField.Flags.ViewChannel,
+      PermissionsBitField.Flags.SendMessages
+    ]
+  }] : []),
+
+  ...(extraRoles.map(roleId => ({
+    id: roleId,
+    allow: [
+      PermissionsBitField.Flags.ViewChannel,
+      PermissionsBitField.Flags.SendMessages,
+      PermissionsBitField.Flags.ReadMessageHistory
+    ]
+  })))
+]
 
       ticketOwners.set(channel.id, user.id);
 
