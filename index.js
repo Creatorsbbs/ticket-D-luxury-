@@ -29,10 +29,11 @@ const client = new Client({
 require("./forca")(client);
 
 // ================= START =================
-client.once("clientReady", async () => {
+client.once("ready", async () => {
   console.log(`🤖 Online como ${client.user.tag}`);
 
-  client.guilds.cache.forEach(guild => setupServer(guild));
+  client.guilds.cache.forEach(guild => {
+  setupServer(guild);
 });
 
 // ================= AUTO SETUP =================
@@ -64,7 +65,7 @@ async function setupServer(guild) {
           },
 
           {
-            id: guild.members.me.id,
+            id: client.user.id
             allow: [
               PermissionsBitField.Flags.ViewChannel,
               PermissionsBitField.Flags.SendMessages,
@@ -238,6 +239,15 @@ client.on("interactionCreate", async (interaction) => {
 
   async function createTicket(type) {
 
+    const alreadyOpen = [...ticketOwners.values()].includes(user.id);
+
+  if (alreadyOpen) {
+    return interaction.editReply({
+      content: "❌ Você já tem um ticket aberto."
+    });
+  }
+
+  try {
     try {
 
       await interaction.deferReply({
@@ -577,6 +587,11 @@ client.on("messageCreate", (message) => {
   if (!data) return;
 
   data.messages++;
+
+db.set(`ticket_${message.channel.id}`, {
+  messages: data.messages,
+  users: [...data.users]
+});
 
   if (!data.users.has(message.author.id)) {
     data.users.add(message.author.id);
