@@ -75,15 +75,6 @@ async function setupServer(guild) {
     deny: [PermissionsBitField.Flags.ViewChannel]
   },
 
-         {
-    id: user.id,
-    allow: [
-      PermissionsBitField.Flags.ViewChannel,
-      PermissionsBitField.Flags.SendMessages,
-      PermissionsBitField.Flags.ReadMessageHistory
-    ]
-  },
-
   ...(staffRole ? [{
     id: staffRole.id,
     allow: [
