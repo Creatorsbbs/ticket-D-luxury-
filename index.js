@@ -61,30 +61,38 @@ async function setupServer(guild) {
         name: "📂・tickets-abertos",
         type: ChannelType.GuildText,
 
-        permissionOverwrites: [
-          {
-            id: guild.id,
-            deny: [PermissionsBitField.Flags.ViewChannel]
-          },
+       permissionOverwrites: [
+  {
+    id: guild.id,
+    deny: [PermissionsBitField.Flags.ViewChannel]
+  },
 
-          {
-            id: client.user.id,
-            allow: [
-              PermissionsBitField.Flags.ViewChannel,
-              PermissionsBitField.Flags.SendMessages,
-              PermissionsBitField.Flags.ManageChannels
-            ]
-          },
+  {
+    id: user.id,
+    allow: [
+      PermissionsBitField.Flags.ViewChannel,
+      PermissionsBitField.Flags.SendMessages,
+      PermissionsBitField.Flags.ReadMessageHistory
+    ]
+  },
 
-          ...(staffRole ? [{
-            id: staffRole.id,
-            allow: [
-              PermissionsBitField.Flags.ViewChannel,
-              PermissionsBitField.Flags.SendMessages
-            ]
-          }] : [])
-        ]
-      });
+  ...(staffRole ? [{
+    id: staffRole.id,
+    allow: [
+      PermissionsBitField.Flags.ViewChannel,
+      PermissionsBitField.Flags.SendMessages
+    ]
+  }] : []),
+
+  ...extraRoles.map(roleId => ({
+    id: roleId,
+    allow: [
+      PermissionsBitField.Flags.ViewChannel,
+      PermissionsBitField.Flags.SendMessages,
+      PermissionsBitField.Flags.ReadMessageHistory
+    ]
+  }))
+]
 
       console.log("✔ Canal tickets-abertos criado");
     }
@@ -270,6 +278,14 @@ client.on("interactionCreate", async (interaction) => {
         });
       }
 
+      const extraRoles = [
+    "ID1",
+    "ID2",
+    "ID3",
+    "ID4",
+    "ID5"
+  ];
+
       const channel = await guild.channels.create({
         name: `🎫-${type}-${user.username.toLowerCase().replace(/[^a-z0-9]/g, "")}-${Date.now().toString().slice(-4)}`,
         type: ChannelType.GuildText,
@@ -351,7 +367,11 @@ Seu ticket foi criado com sucesso e nossa equipe já foi notificada.
       );
 
       await channel.send({
-        content: `${staffRole ? `<@&${staffRole.id}>` : ""} <@${guild.ownerId}> <@${user.id}>`,
+        content: `
+${staffRole ? `<@&${staffRole.id}>` : ""}
+${extraRoles.map(r => `<@&${r}>`).join(" ")}
+<@${user.id}>
+`,
         embeds: [embed],
         components: [row]
       });
