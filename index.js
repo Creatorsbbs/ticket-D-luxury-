@@ -55,8 +55,8 @@ async function setupServer(guild) {
     let staffRoleId = await db.get(`staffRole_${guild.id}`);
 
     let staffRole = staffRoleId
-      ? guild.roles.cache.get(staffRoleId)
-      : null;
+  ? await guild.roles.fetch(staffRoleId).catch(() => null)
+  : null;
 
     // ================= CANAL TICKETS ABERTOS =================
     let openLogs = guild.channels.cache.find(
@@ -361,14 +361,20 @@ Seu ticket foi criado com sucesso e nossa equipe já foi notificada.
       );
 
       await channel.send({
-        content: `
-${staffRole ? `<@&${staffRole.id}>` : ""}
-${extraRoles.map(r => `<@&${r}>`).join(" ")}
-<@${user.id}>
-`,
-        embeds: [embed],
-        components: [row]
-      });
+  content: [
+    staffRole ? `<@&${staffRole.id}>` : "",
+    extraRoles.map(r => `<@&${r}>`).join(" "),
+    `<@${user.id}>`
+  ].join("\n"),
+
+  allowedMentions: {
+    roles: staffRole ? [staffRole.id, ...extraRoles] : extraRoles,
+    users: [user.id]
+  },
+
+  embeds: [embed],
+  components: [row]
+});
 
       // ================= LOG ABERTO =================
       const log = guild.channels.cache.find(
