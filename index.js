@@ -91,7 +91,8 @@ async function setupServer(guild) {
       PermissionsBitField.Flags.SendMessages
     ]
   }] : []),
-
+]
+         
       console.log("✔ Canal tickets-abertos criado");
     }
 
