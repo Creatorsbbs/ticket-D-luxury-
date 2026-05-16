@@ -28,6 +28,8 @@ const client = new Client({
 
 require("./forca")(client);
 
+require("./deploy")(client);
+
 // ================= START =================
 client.once("ready", async () => {
   console.log(`🤖 Online como ${client.user.tag}`);
