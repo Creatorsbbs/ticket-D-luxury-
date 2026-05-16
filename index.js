@@ -13,11 +13,11 @@ const { QuickDB } = require("quick.db");
 const db = new QuickDB();
 
 const extraRoles = [
-  "ID_DO_CARGO_1",
-  "ID_DO_CARGO_2",
-  "ID_DO_CARGO_3",
-  "ID_DO_CARGO_4",
-  "ID_DO_CARGO_5"
+  "1491095314550100100",
+  "1491095311383527630",
+  "1491095310351597698",
+  "1491095309508546742",
+  "1494862321481416834"
 ];
 
 // ================= DADOS =================
