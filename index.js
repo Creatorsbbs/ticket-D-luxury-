@@ -34,6 +34,7 @@ client.once("ready", async () => {
 
   client.guilds.cache.forEach(guild => {
   setupServer(guild);
+ });
 });
 
 // ================= AUTO SETUP =================
@@ -65,7 +66,7 @@ async function setupServer(guild) {
           },
 
           {
-            id: client.user.id
+            id: client.user.id,
             allow: [
               PermissionsBitField.Flags.ViewChannel,
               PermissionsBitField.Flags.SendMessages,
@@ -248,7 +249,6 @@ client.on("interactionCreate", async (interaction) => {
   }
 
   try {
-    try {
 
       await interaction.deferReply({
         flags: 64
@@ -583,19 +583,25 @@ client.on("messageCreate", (message) => {
   if (!message.guild) return;
 
   const data = ticketData.get(message.channel.id);
-
   if (!data) return;
 
-  data.messages++;
+  // ignora bot (evita spam de contador)
+  if (message.author.bot) return;
 
-db.set(`ticket_${message.channel.id}`, {
-  messages: data.messages,
-  users: [...data.users]
-});
-
+  // adiciona usuário se for novo
   if (!data.users.has(message.author.id)) {
     data.users.add(message.author.id);
   }
+
+  // conta mensagem
+  data.messages++;
+
+  // salva no banco
+  db.set(`ticket_${message.channel.id}`, {
+    messages: data.messages,
+    users: [...data.users]
+  });
+
 });
 
 // ================= ERROS =================
