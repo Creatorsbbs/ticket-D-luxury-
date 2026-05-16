@@ -298,6 +298,9 @@ client.on("interactionCreate", async (interaction) => {
       PermissionsBitField.Flags.SendMessages
     ]
   }] : []),
+          ]
+      }];
+          
 
   ...(extraRoles.map(roleId => ({
     id: roleId,
