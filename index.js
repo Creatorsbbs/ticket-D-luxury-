@@ -75,7 +75,7 @@ async function setupServer(guild) {
     deny: [PermissionsBitField.Flags.ViewChannel]
   },
 
-  {
+         {
     id: user.id,
     allow: [
       PermissionsBitField.Flags.ViewChannel,
@@ -92,6 +92,8 @@ async function setupServer(guild) {
     ]
   }] : []),
 ]
+});
+      
          
       console.log("✔ Canal tickets-abertos criado");
     }
