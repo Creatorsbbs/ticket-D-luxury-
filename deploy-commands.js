@@ -3,13 +3,11 @@ const { REST, Routes, SlashCommandBuilder } = require("discord.js");
 const commands = [
   new SlashCommandBuilder()
     .setName("painel")
-    .setDescription("Abre o painel de tickets")
-    .toJSON(),
+    .setDescription("Abre o painel de tickets"),
 
   new SlashCommandBuilder()
     .setName("forca")
-    .setDescription("Inicia uma partida de forca multiplayer")
-    .toJSON(),
+    .setDescription("Inicia uma partida de forca multiplayer"),
 
   new SlashCommandBuilder()
     .setName("setstaff")
@@ -20,8 +18,7 @@ const commands = [
         .setDescription("Selecione o cargo de staff")
         .setRequired(true)
     )
-    .toJSON()
-];
+].map(cmd => cmd.toJSON());
 
 const rest = new REST({ version: "10" }).setToken(process.env.TOKEN);
 
