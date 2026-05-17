@@ -14,6 +14,17 @@ module.exports = async (client) => {
     new SlashCommandBuilder()
       .setName("setstaff")
       .setDescription("Define staff")
+
+    new SlashCommandBuilder()
+      .setName("skin")
+      .setDescription("Mostra a skin de um jogador Roblox")
+      .addStringOption(option =>
+        option
+          .setName("usuario")
+          .setDescription("Nome do jogador Roblox")
+          .setRequired(true)
+      )
+  
   ].map(cmd => cmd.toJSON());
 
   const rest = new REST({ version: "10" }).setToken(process.env.TOKEN);
