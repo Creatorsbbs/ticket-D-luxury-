@@ -13,7 +13,7 @@ module.exports = async (client) => {
 
     new SlashCommandBuilder()
       .setName("setstaff")
-      .setDescription("Define staff")
+      .setDescription("Define staff"),
 
     new SlashCommandBuilder()
       .setName("skin")
