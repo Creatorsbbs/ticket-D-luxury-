@@ -38,6 +38,8 @@ require("./forca")(client);
 
 require("./deploy")(client);
 
+const skinCommand = require("./skin");
+
 // ================= START =================
 client.once("ready", async () => {
   console.log(`🤖 Online como ${client.user.tag}`);
@@ -157,6 +159,8 @@ client.on("interactionCreate", async (interaction) => {
 
     if (!interaction.isChatInputCommand()) return;
 
+    await skinCommand(interaction);
+    
     if (interaction.commandName === "painel") {
 
       await interaction.deferReply();
